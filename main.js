@@ -14,8 +14,7 @@ function createWindow() {
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
-            enableRemoteModule: true,
-            preload: path.join(__dirname, 'preload.js')
+            enableRemoteModule: true
         },
         icon: path.join(__dirname, 'build', 'icon.ico'),
         show: false,
@@ -115,7 +114,9 @@ ipcMain.handle('get-app-path', () => {
 
 // Obtener API key de OpenAI desde variables de entorno
 ipcMain.handle('get-openai-api-key', () => {
-    return process.env.OPENAI_API_KEY || '';
+    const apiKey = process.env.OPENAI_API_KEY || '';
+    console.log('[main.js] API Key:', apiKey ? `${apiKey.substring(0,10)}...${apiKey.substring(apiKey.length-10)} (${apiKey.length} chars)` : 'EMPTY');
+    return apiKey;
 });
 
 // Handle de errores no capturados

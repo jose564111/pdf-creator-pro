@@ -1,6 +1,19 @@
 // Aplicación principal - Orquestación de módulos
 const { ipcRenderer } = require('electron');
 
+// Crear API de electron para el renderer
+if (!window.electronAPI) {
+    window.electronAPI = {
+        getOpenAIKey: () => ipcRenderer.invoke('get-openai-api-key'),
+        openFileDialog: () => ipcRenderer.invoke('open-file-dialog'),
+        saveFileDialog: (options) => ipcRenderer.invoke('save-file-dialog', options),
+        readFile: (filePath) => ipcRenderer.invoke('read-file', filePath),
+        writeFile: (filePath, data) => ipcRenderer.invoke('write-file', filePath, data),
+        showMessage: (options) => ipcRenderer.invoke('show-message', options),
+        getAppPath: () => ipcRenderer.invoke('get-app-path')
+    };
+}
+
 // Estado de la aplicación
 const AppState = {
     currentPDF: null,
@@ -658,11 +671,15 @@ async function ensureAIInitialized() {
         // Obtener y configurar API key
         if (window.electronAPI && window.electronAPI.getOpenAIKey) {
             const apiKey = await window.electronAPI.getOpenAIKey();
+            console.log('API Key recibida:', apiKey ? `${apiKey.substring(0,10)}...${apiKey.substring(apiKey.length-10)} (${apiKey.length} chars)` : 'undefined');
             if (apiKey) {
                 AppState.aiIntegration.setAPIKey(apiKey);
+                console.log('API Key configurada en aiIntegration');
             } else {
                 throw new Error('API Key de OpenAI no configurada. Por favor, configura tu API key en el archivo .env');
             }
+        } else {
+            console.warn('electronAPI.getOpenAIKey no disponible');
         }
     }
     
