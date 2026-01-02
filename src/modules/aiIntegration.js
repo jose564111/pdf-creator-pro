@@ -17,7 +17,7 @@ class AIIntegration {
 
     async generateContent(prompt, options = {}) {
         try {
-            if (!this.apiKey) {
+            if (!this.apiKey || !this.client) {
                 throw new Error('API Key de OpenAI no configurada. Por favor, configura la variable de entorno OPENAI_API_KEY en el archivo .env');
             }
 
@@ -99,10 +99,10 @@ Texto:\n${text}`;
         });
     }
 
-    async autoFillForm(formFields, context) {
+    async autoFillForm(formFields, context = '') {
         const prompt = `Basándote en el siguiente contexto, sugiere valores apropiados para estos campos de formulario:
         
-Contexto: ${context}
+Contexto: ${context || 'No hay contexto adicional, usa valores lógicos y apropiados.'}
 
 Campos: ${JSON.stringify(formFields)}
 

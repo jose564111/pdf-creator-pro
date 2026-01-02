@@ -376,24 +376,19 @@ async function extractDataWithAI() {
         showToast('Primero debes abrir un PDF', 'warning');
         return;
     }
-    
+
     showLoading('Extrayendo datos con IA...');
-    
+
     try {
-        // Inicializar IA si no existe
-        if (!AppState.aiIntegration) {
-            if (!window.AIIntegration) {
-                await loadModule('aiIntegration');
-            }
-            AppState.aiIntegration = new AIIntegration();
-        }
-        
+        // Asegurar que IA esté inicializada
+        await ensureAIInitialized();
+
         const textResult = await AppState.pdfReader.extractAllText();
-        
+
         if (!textResult.success) {
             throw new Error('No se pudo extraer el texto del PDF');
         }
-        
+
         const extractResult = await AppState.aiIntegration.extractDataFromPDF(
             textResult.text,
             'extrae toda la información relevante como nombres, fechas, montos, direcciones, etc.'
@@ -512,20 +507,15 @@ async function autoFillWithAI() {
         showToast('Primero debes abrir un PDF con formulario', 'warning');
         return;
     }
-    
+
     showLoading('Auto-rellenando con IA...');
-    
+
     try {
-        // Inicializar IA si no existe
-        if (!AppState.aiIntegration) {
-            if (!window.AIIntegration) {
-                await loadModule('aiIntegration');
-            }
-            AppState.aiIntegration = new AIIntegration();
-        }
-        
+        // Asegurar que IA esté inicializada
+        await ensureAIInitialized();
+
         const formResult = await AppState.pdfReader.detectFormFields();
-        
+
         if (!formResult.success || formResult.count === 0) {
             showToast('No se encontraron campos de formulario', 'warning');
             hideLoading();
@@ -578,31 +568,19 @@ async function saveAPIKey() {
 
 async function generateWithAI() {
     const prompt = document.getElementById('aiPrompt').value.trim();
-    
+
     if (!prompt) {
         showToast('Por favor describe lo que quieres crear', 'warning');
         return;
     }
-    
-    // Inicializar IA si no existe
-    if (!AppState.aiIntegration) {
-        try {
-            if (!window.AIIntegration) {
-                await loadModule('aiIntegration');
-            }
-            AppState.aiIntegration = new AIIntegration();
-        } catch (error) {
-            showToast('Error inicializando IA', 'error');
-            return;
-        }
-    }
-    
+
     showLoading('Generando con IA...');
-    
+
     try {
-        const result = await AppState.aiIntegration.generatePDFContent(prompt);
+        // Asegurar que IA esté inicializada
+        await ensureAIInitialized();
         
-        if (result.success) {
+        const result = await AppState.aiIntegration.generatePDFContent(prompt);        if (result.success) {
             document.getElementById('aiResult').innerHTML = `
                 <h4>Contenido Generado:</h4>
                 <pre style="white-space: pre-wrap;">${JSON.stringify(result.content, null, 2)}</pre>
@@ -667,6 +645,33 @@ function openModal(modalId) {
 
 function closeModal(modalId) {
     document.getElementById(modalId).classList.remove('active');
+}
+
+// Helper para inicializar IA de manera consistente
+async function ensureAIInitialized() {
+    if (!AppState.aiIntegration) {
+        if (!window.AIIntegration) {
+            await loadModule('aiIntegration');
+        }
+        AppState.aiIntegration = new AIIntegration();
+        
+        // Obtener y configurar API key
+        if (window.electronAPI && window.electronAPI.getOpenAIKey) {
+            const apiKey = await window.electronAPI.getOpenAIKey();
+            if (apiKey) {
+                AppState.aiIntegration.setAPIKey(apiKey);
+            } else {
+                throw new Error('API Key de OpenAI no configurada. Por favor, configura tu API key en el archivo .env');
+            }
+        }
+    }
+    
+    // Verificar que la API key esté configurada
+    if (!AppState.aiIntegration.isConfigured || !AppState.aiIntegration.isConfigured()) {
+        throw new Error('API Key de OpenAI no configurada. Por favor, configura tu API key.');
+    }
+    
+    return AppState.aiIntegration;
 }
 
 function showLoading(message = 'Cargando...') {
