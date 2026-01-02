@@ -3,7 +3,13 @@ const OpenAI = require('openai');
 class AIIntegration {
     constructor() {
         // Cargar API key desde variable de entorno
-        this.apiKey = process.env.OPENAI_API_KEY || '';
+        this.apiKey = ''  // Se configurará desde el renderer
+        this.client = null;
+    }
+
+    // Configurar API key y crear cliente
+    setAPIKey(apiKey) {
+        this.apiKey = apiKey;
         this.client = new OpenAI({
             apiKey: this.apiKey
         });
@@ -203,3 +209,4 @@ Devuelve un objeto JSON con los campos y sus valores sugeridos.`;
 }
 
 module.exports = AIIntegration;
+

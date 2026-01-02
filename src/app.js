@@ -18,26 +18,35 @@ const AppState = {
 // Inicialización
 document.addEventListener('DOMContentLoaded', async () => {
     console.log('PDF Creator Pro - Inicializando...');
-    
+
     // Inicializar IA automáticamente al inicio
     try {
         if (!window.AIIntegration) {
             await loadModule('aiIntegration');
         }
         AppState.aiIntegration = new AIIntegration();
+        
+        // Obtener API key desde el proceso principal
+        if (window.electronAPI && window.electronAPI.getOpenAIKey) {
+            const apiKey = await window.electronAPI.getOpenAIKey();
+            if (apiKey) {
+                AppState.aiIntegration.setAPIKey(apiKey);
+                console.log('✅ Sistema de IA inicializado con API key');
+            } else {
+                console.warn('⚠️ API key de OpenAI no configurada en .env');
+            }
+        }
         console.log('✅ Sistema de IA inicializado automáticamente');
     } catch (error) {
         console.error('Error inicializando IA:', error);
     }
-    
+
     // Setup event listeners
     setupEventListeners();
-    
+
     // Mostrar pantalla de bienvenida
     showWelcomeScreen();
-});
-
-// Setup de event listeners
+});// Setup de event listeners
 function setupEventListeners() {
     // Header buttons
     document.getElementById('newPdfBtn').addEventListener('click', showNewPDFOptions);
