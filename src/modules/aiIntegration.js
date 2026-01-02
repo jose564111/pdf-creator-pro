@@ -15,6 +15,11 @@ class AIIntegration {
         });
     }
 
+    // Verificar si la API está configurada correctamente
+    isConfigured() {
+        return !!(this.apiKey && this.apiKey.length > 0 && this.client);
+    }
+
     async generateContent(prompt, options = {}) {
         try {
             if (!this.apiKey || !this.client) {

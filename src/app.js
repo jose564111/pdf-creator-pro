@@ -667,8 +667,8 @@ async function ensureAIInitialized() {
     }
     
     // Verificar que la API key esté configurada
-    if (!AppState.aiIntegration.isConfigured || !AppState.aiIntegration.isConfigured()) {
-        throw new Error('API Key de OpenAI no configurada. Por favor, configura tu API key.');
+    if (!AppState.aiIntegration.isConfigured()) {
+        throw new Error('API Key de OpenAI no configurada. Por favor, configura tu API key en el archivo .env o en la interfaz.');
     }
     
     return AppState.aiIntegration;
