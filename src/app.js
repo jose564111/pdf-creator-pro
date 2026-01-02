@@ -34,24 +34,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Inicializar IA automáticamente al inicio
     try {
-        if (!window.AIIntegration) {
-            await loadModule('aiIntegration');
-        }
-        AppState.aiIntegration = new AIIntegration();
-        
-        // Obtener API key desde el proceso principal
-        if (window.electronAPI && window.electronAPI.getOpenAIKey) {
-            const apiKey = await window.electronAPI.getOpenAIKey();
-            if (apiKey) {
-                AppState.aiIntegration.setAPIKey(apiKey);
-                console.log('✅ Sistema de IA inicializado con API key');
-            } else {
-                console.warn('⚠️ API key de OpenAI no configurada en .env');
-            }
-        }
-        console.log('✅ Sistema de IA inicializado automáticamente');
+        await ensureAIInitialized();
+        console.log('✅ Sistema de IA inicializado correctamente');
     } catch (error) {
-        console.error('Error inicializando IA:', error);
+        console.error('⚠️ Error inicializando IA:', error.message);
+        console.log('ℹ️ Puedes configurar la API key más tarde en la interfaz');
     }
 
     // Setup event listeners
