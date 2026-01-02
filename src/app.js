@@ -12,6 +12,14 @@ if (!window.electronAPI) {
         showMessage: (options) => ipcRenderer.invoke('show-message', options),
         getAppPath: () => ipcRenderer.invoke('get-app-path')
     };
+    console.log('[app.js] electronAPI creado');
+    
+    // Test inmediato
+    window.electronAPI.getOpenAIKey().then(key => {
+        console.log('[app.js] Test getOpenAIKey:', key ? `${key.substring(0,10)}... (${key.length} chars)` : 'undefined/empty');
+    }).catch(err => {
+        console.error('[app.js] Error en test getOpenAIKey:', err);
+    });
 }
 
 // Estado de la aplicación
