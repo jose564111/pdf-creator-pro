@@ -206,6 +206,24 @@ Devuelve un objeto JSON con los campos y sus valores sugeridos.`;
             };
         }
     }
+
+    // Generar contenido para PDF
+    async generatePDFContent(prompt) {
+        return await this.generateContent(prompt, {
+            systemPrompt: 'Eres un asistente experto en crear contenido estructurado para documentos PDF. Genera texto claro, bien formateado y profesional.',
+            temperature: 0.7,
+            maxTokens: 3000
+        });
+    }
+
+    // Extraer datos de PDF (alias para compatibilidad)
+    async extractDataFromPDF(text, instruction) {
+        const prompt = `${instruction}\n\nTexto del PDF:\n${text}`;
+        return await this.generateContent(prompt, {
+            systemPrompt: 'Eres un experto en análisis y extracción de información de documentos.',
+            temperature: 0.3
+        });
+    }
 }
 
 module.exports = AIIntegration;
