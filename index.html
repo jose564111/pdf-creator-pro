@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Creator Pro - Editor Completo</title>
+    <link rel="stylesheet" href="src/styles/main.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <h1>📄 PDF Creator Pro</h1>
+            <div class="header-actions">
+                <button id="newPdfBtn" class="btn btn-primary">
+                    <span>➕</span> Nuevo PDF
+                </button>
+                <button id="openPdfBtn" class="btn btn-secondary">
+                    <span>📂</span> Abrir PDF
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-section">
+                    <h3>🛠️ Herramientas</h3>
+                    <div class="tool-group">
+                        <h4>Creación</h4>
+                        <button class="tool-btn" data-tool="create-blank">PDF en Blanco</button>
+                        <button class="tool-btn" data-tool="create-template">Desde Plantilla</button>
+                        <button class="tool-btn" data-tool="create-ai">Generar con IA</button>
+                    </div>
+                    <div class="tool-group">
+                        <h4>Edición</h4>
+                        <button class="tool-btn" data-tool="add-text">Añadir Texto</button>
+                        <button class="tool-btn" data-tool="add-image">Añadir Imagen</button>
+                        <button class="tool-btn" data-tool="add-shape">Añadir Forma</button>
+                        <button class="tool-btn" data-tool="fill-form">Rellenar Formulario</button>
+                    </div>
+                    <div class="tool-group">
+                        <h4>Páginas</h4>
+                        <button class="tool-btn" data-tool="add-page">Añadir Página</button>
+                        <button class="tool-btn" data-tool="delete-page">Eliminar Página</button>
+                        <button class="tool-btn" data-tool="reorder-pages">Reordenar</button>
+                    </div>
+                    <div class="tool-group">
+                        <h4>IA Asistente</h4>
+                        <button class="tool-btn" data-tool="ai-fill">Rellenar con IA</button>
+                        <button class="tool-btn" data-tool="ai-generate">Generar Contenido</button>
+                        <button class="tool-btn" data-tool="ai-extract">Extraer Datos</button>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Workspace -->
+            <main class="workspace">
+                <div class="canvas-container">
+                    <canvas id="pdfCanvas"></canvas>
+                    <div id="pdfViewer" class="pdf-viewer"></div>
+                </div>
+                
+                <div class="page-controls">
+                    <button id="prevPage" class="btn-icon">◀</button>
+                    <span id="pageInfo">Página 1 de 1</span>
+                    <button id="nextPage" class="btn-icon">▶</button>
+                    <div class="zoom-controls">
+                        <button id="zoomOut" class="btn-icon">-</button>
+                        <span id="zoomLevel">100%</span>
+                        <button id="zoomIn" class="btn-icon">+</button>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Properties Panel -->
+            <aside class="properties-panel">
+                <h3>⚙️ Propiedades</h3>
+                <div id="propertiesContent" class="properties-content">
+                    <p class="no-selection">Selecciona un elemento para ver propiedades</p>
+                </div>
+                
+                <div class="export-section">
+                    <h4>💾 Exportar</h4>
+                    <button id="savePdfBtn" class="btn btn-success btn-block">Guardar PDF</button>
+                    <button id="exportPdfBtn" class="btn btn-secondary btn-block">Exportar Como...</button>
+                </div>
+            </aside>
+        </div>
+
+        <!-- AI Modal -->
+        <div id="aiModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>🤖 Asistente IA</h2>
+                <p style="color: #2ecc71; margin-bottom: 1rem;">✅ Sistema de IA activado y listo para usar</p>
+                <div class="ai-prompt">
+                    <label>Describe lo que quieres crear o hacer:</label>
+                    <textarea id="aiPrompt" rows="5" placeholder="Ejemplos:
+- Crea un contrato de arrendamiento con campos para nombre, dirección, fecha...
+- Genera una factura para servicios de consultoría
+- Extrae todos los nombres y fechas de este documento
+- Resume el contenido principal de este PDF"></textarea>
+                    <button id="generateAiBtn" class="btn btn-primary btn-block">Generar</button>
+                </div>
+                <div id="aiResult" class="ai-result"></div>
+            </div>
+        </div>
+
+        <!-- Form Fill Modal -->
+        <div id="formModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>📝 Rellenar Formulario</h2>
+                <div id="formFields" class="form-fields"></div>
+                <div class="modal-actions">
+                    <button id="fillFormBtn" class="btn btn-primary">Rellenar</button>
+                    <button id="aiAutoFillBtn" class="btn btn-secondary">Auto-Rellenar con IA</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Overlay -->
+        <div id="loadingOverlay" class="loading-overlay hidden">
+            <div class="spinner"></div>
+            <p>Procesando...</p>
+        </div>
+    </div>
+
+    <script src="src/modules/pdfCreator.js"></script>
+    <script src="src/modules/pdfReader.js"></script>
+    <script src="src/modules/pdfEditor.js"></script>
+    <script src="src/modules/aiIntegration.js"></script>
+    <script src="src/app.js"></script>
+</body>
+</html>

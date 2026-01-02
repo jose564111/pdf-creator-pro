@@ -1,0 +1,33 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4a90e2;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7b68ee;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Fondo con gradiente -->
+  <rect width="512" height="512" rx="80" fill="url(#grad)"/>
+  
+  <!-- Documento -->
+  <g transform="translate(106, 76)">
+    <!-- PÃ¡gina -->
+    <rect x="0" y="0" width="300" height="360" fill="white" rx="10"/>
+    
+    <!-- Esquina doblada -->
+    <path d="M 250 0 L 300 50 L 250 50 Z" fill="#e0e0e0"/>
+    
+    <!-- LÃ­neas de texto -->
+    <rect x="40" y="80" width="220" height="12" fill="#4a90e2" rx="6"/>
+    <rect x="40" y="110" width="220" height="12" fill="#4a90e2" opacity="0.5" rx="6"/>
+    <rect x="40" y="140" width="180" height="12" fill="#4a90e2" opacity="0.5" rx="6"/>
+    
+    <rect x="40" y="190" width="220" height="12" fill="#4a90e2" opacity="0.3" rx="6"/>
+    <rect x="40" y="220" width="220" height="12" fill="#4a90e2" opacity="0.3" rx="6"/>
+    <rect x="40" y="250" width="160" height="12" fill="#4a90e2" opacity="0.3" rx="6"/>
+  </g>
+  
+  <!-- Texto PDF -->
+  <text x="256" y="440" font-family="Arial, sans-serif" font-size="80" font-weight="bold" 
+        fill="white" text-anchor="middle">PDF</text>
+</svg>
