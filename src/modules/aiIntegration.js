@@ -9,18 +9,23 @@ class AIIntegration {
 
     // Configurar API key y crear cliente
     setAPIKey(apiKey) {
+        console.log('[aiIntegration] setAPIKey llamado con:', apiKey ? `${apiKey.substring(0,10)}...${apiKey.substring(apiKey.length-10)} (${apiKey.length} chars)` : 'EMPTY/NULL');
         this.apiKey = apiKey;
         this.client = new OpenAI({
             apiKey: this.apiKey
         });
+        console.log('[aiIntegration] Cliente OpenAI creado:', this.client ? 'SUCCESS' : 'FAILED');
     }
 
     // Verificar si la API está configurada correctamente
     isConfigured() {
-        return !!(this.apiKey && this.apiKey.length > 0 && this.client);
+        const configured = !!(this.apiKey && this.apiKey.length > 0 && this.client);
+        console.log('[aiIntegration] isConfigured:', configured, '- apiKey:', !!this.apiKey, 'client:', !!this.client);
+        return configured;
     }
 
     async generateContent(prompt, options = {}) {
+        console.log('[aiIntegration] generateContent - apiKey:', !!this.apiKey, 'client:', !!this.client);
         try {
             if (!this.apiKey || !this.client) {
                 throw new Error('API Key de OpenAI no configurada. Por favor, configura la variable de entorno OPENAI_API_KEY en el archivo .env');
